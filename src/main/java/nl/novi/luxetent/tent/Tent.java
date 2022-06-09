@@ -1,6 +1,23 @@
 package nl.novi.luxetent.tent;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table
 public class Tent {
+    @Id
+    @SequenceGenerator(
+            name = "tent_sequence",
+            sequenceName = "tent_sequence",
+            allocationSize = 1
+    )
+
+    @GeneratedValue (
+            strategy = GenerationType.SEQUENCE,
+            generator = "tent_sequence"
+    )
+
     private long id;
     private String title;
     private String description;
