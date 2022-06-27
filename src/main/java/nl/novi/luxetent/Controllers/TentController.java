@@ -1,66 +1,62 @@
 package nl.novi.luxetent.Controllers;
-import nl.novi.luxetent.dtos.TentDto;
-import nl.novi.luxetent.dtos.TentInputDto;
+
+import nl.novi.luxetent.models.FileUploadResponse;
+import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.services.TentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin
+@RequestMapping("/tents")
 public class TentController {
 
     private final TentService tentService;
+    private final PhotoController controller;
 
     @Autowired
-    public TentController(TentService tentService) {
+    public TentController(TentService tentService, PhotoController controller) {
         this.tentService = tentService;
+        this.controller = controller;
     }
 
-    @GetMapping("/tents")
-    public ResponseEntity<List<TentDto>> getAllTents(@RequestParam(value = "name", required = false) Optional<String> name) {
-        List<TentDto> dtos;
+    @GetMapping
+    @Transactional
+    public List<Tent> getAllTents() {
 
-        if (name.isEmpty()) {
-            dtos = tentService.getAllTents();
-        } else {
-            dtos = tentService.getAllTentsByName(name.get());
-        }
-        return ResponseEntity.ok().body(dtos);
+        List<Tent> tents;
+        tents = tentService.getAllTents();
+        return tents;
     }
 
-    @GetMapping("/tents/{id}")
-    public ResponseEntity<TentDto> getTent(@PathVariable("id")Long id) {
-       TentDto tent = tentService.getTentById(id);
-
-        return ResponseEntity.ok().body(tent);
+    @GetMapping("/{id}")
+    @Transactional
+    public Tent getTent(@PathVariable("id") Long tentId){
+        return tentService.getTent(tentId);
     }
 
-    @PostMapping("/tents")
-    public ResponseEntity<Object> addTent(@RequestBody TentInputDto tentInputDto) {
-        TentDto dto = tentService.addTent(tentInputDto);
-
-        return ResponseEntity.created(null).body(dto);
+    @PostMapping
+    public Tent saveTent(@RequestBody Tent tent){
+        return tentService.saveTent(tent);
     }
 
-    @DeleteMapping("/tents/{id}")
-    public ResponseEntity<Object> deleteTent(@PathVariable Long id) {
-        tentService.deleteTent(id);
 
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("{id}")
+    public void deleteTent(@PathVariable("id") Long tentId) {
+        tentService.deleteTent(tentId);
     }
 
-    @PutMapping("/tents/{id}")
-    public ResponseEntity<Object> updateTent(@PathVariable Long id, @RequestBody TentInputDto newTent) {
-        TentDto dto = tentService.updateTent(id, newTent);
 
-        return ResponseEntity.ok().body(dto);
+    @PostMapping("/{id}/photo")
+    public void assignPhotoToTent(@PathVariable("id") Long tentId, @RequestBody MultipartFile file) {
+        FileUploadResponse photo = controller.singleFileUpload(file);
+
+        tentService.assignPhotoToTent(photo.getFileName(), tentId);
     }
-
 
 }
 

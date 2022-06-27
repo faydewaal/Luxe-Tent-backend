@@ -1,5 +1,4 @@
 package nl.novi.luxetent.Controllers;
-
 import nl.novi.luxetent.models.AppUser;
 import nl.novi.luxetent.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
     @RestController
-    @RequestMapping("app-user")
     @CrossOrigin("*")
     public class AppUserController {
 
@@ -20,9 +18,24 @@ import java.util.List;
         }
 
 
-        @GetMapping
+        @GetMapping("/app-users")
         public List<AppUser> getAppUsers() {
             return appUserService.getAppUsers();
+        }
+
+        @GetMapping("/app-users/{id}")
+        public AppUser getAppUser(@PathVariable("id") Long id) {
+            return appUserService.getAppUser(id);
+        }
+
+        @PostMapping("/app-users")
+        public AppUser saveAppUser(@RequestBody AppUser appUser) {
+            return appUserService.saveAppUser(appUser);
+        }
+
+        @DeleteMapping("/app-users/{id}")
+        public void deleteAppUser(@PathVariable("id") Long id) {
+            appUserService.deleteAppUser(id);
         }
 
 
