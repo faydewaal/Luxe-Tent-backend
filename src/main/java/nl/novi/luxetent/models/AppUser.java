@@ -25,6 +25,7 @@ public class AppUser {
     private String phoneNumber;
     private String password_encrypted;
 
+
     public AppUser() {
 
     }
