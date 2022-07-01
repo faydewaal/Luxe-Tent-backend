@@ -1,4 +1,4 @@
-package nl.novi.luxetent.Controllers;
+package nl.novi.luxetent.controllers;
 
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import org.springframework.http.HttpStatus;
