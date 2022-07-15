@@ -1,4 +1,4 @@
-package nl.novi.luxetent.Controllers;
+package nl.novi.luxetent.controllers;
 
 import nl.novi.luxetent.models.FileUploadResponse;
 import nl.novi.luxetent.services.PhotoService;
