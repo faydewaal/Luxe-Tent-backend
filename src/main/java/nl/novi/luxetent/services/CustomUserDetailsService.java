@@ -1,7 +1,7 @@
 package nl.novi.luxetent.services;
 
 import nl.novi.luxetent.models.Authority;
-import nl.novi.luxetent.models.UserDto;
+import nl.novi.luxetent.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

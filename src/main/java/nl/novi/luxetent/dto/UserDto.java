@@ -1,10 +1,12 @@
-package nl.novi.luxetent.models;
+package nl.novi.luxetent.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import nl.novi.luxetent.models.Authority;
 
 import java.util.Set;
 
 public class UserDto {
+
     public String username;
     public String password;
     public Boolean enabled;

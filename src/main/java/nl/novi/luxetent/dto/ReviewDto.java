@@ -1,18 +1,13 @@
-package nl.novi.luxetent.models;
+package nl.novi.luxetent.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-public class Reviews {
-    @Id
+public class ReviewDto {
     private Long id;
     private String comment;
 
-    public Reviews() {
+    public ReviewDto() {
     }
 
-    public Reviews(Long id, String comment) {
+    public ReviewDto(Long id, String comment) {
         this.id = id;
         this.comment = comment;
     }

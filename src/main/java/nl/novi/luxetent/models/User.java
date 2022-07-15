@@ -12,7 +12,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 155)
     private String password;
 
     @Column(nullable = false)
@@ -23,7 +23,6 @@ public class User {
 
     @Column
     private String email;
-
 
     @OneToMany(
             targetEntity = Authority.class,

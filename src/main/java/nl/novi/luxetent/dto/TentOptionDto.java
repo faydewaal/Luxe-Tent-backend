@@ -1,17 +1,18 @@
-package nl.novi.luxetent.models;
+package nl.novi.luxetent.dto;
 
-import javax.persistence.*;
-
-@Entity
-public class TentOption {
-    @Id
+public class TentOptionDto {
     private Long id;
     private String optionName;
     private Float price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Tent_id")
-    private Tent tent;
+    public TentOptionDto() {
+    }
+
+    public TentOptionDto(Long id, String optionName, Float price) {
+        this.id = id;
+        this.optionName = optionName;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
@@ -35,13 +36,5 @@ public class TentOption {
 
     public void setPrice(Float price) {
         this.price = price;
-    }
-
-    public Tent getTent() {
-        return tent;
-    }
-
-    public void setTent(Tent tent) {
-        this.tent = tent;
     }
 }

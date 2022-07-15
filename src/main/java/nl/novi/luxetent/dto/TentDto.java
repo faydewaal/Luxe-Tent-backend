@@ -1,17 +1,7 @@
-package nl.novi.luxetent.models;
+package nl.novi.luxetent.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
-import java.util.List;
-
-
-@Entity
-public class Tent {
-    @Id
-    @GeneratedValue
+public class TentDto {
     private Long Id;
-
     private String title;
     private String description;
     private float pricePerNight;
@@ -21,11 +11,11 @@ public class Tent {
     private String city;
     private String province;
 
-    public Tent() {
+    public TentDto() {
     }
 
-    public Tent(Long id, String title, String description, float pricePerNight, int maxNumberOfPersons, String street, String houseNumber, String city, String province, FileUploadResponse file, List<Booking> bookings, List<Review> reviews, List<TentOption> tentOptions) {
-        Id = id;
+    public TentDto(Long Id, String title, String description, float pricePerNight, int maxNumberOfPersons, String street, String houseNumber, String city, String province) {
+        this.Id = Id;
         this.title = title;
         this.description = description;
         this.pricePerNight = pricePerNight;
@@ -34,33 +24,14 @@ public class Tent {
         this.houseNumber = houseNumber;
         this.city = city;
         this.province = province;
-        this.file = file;
-        this.bookings = bookings;
-        this.reviews = reviews;
-        this.tentOptions = tentOptions;
     }
-
-    @OneToOne
-    FileUploadResponse file;
-
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
-    List<Booking> bookings;
-
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
-    List<Review> reviews;
-
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
-    List<TentOption> tentOptions;
 
     public Long getId() {
         return Id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.Id = id;
     }
 
     public String getTitle() {
@@ -127,35 +98,4 @@ public class Tent {
         this.province = province;
     }
 
-    public FileUploadResponse getFile() {
-        return file;
-    }
-
-    public void setFile(FileUploadResponse file) {
-        this.file = file;
-    }
-
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<TentOption> getTentOptions() {
-        return tentOptions;
-    }
-
-    public void setTentOptions(List<TentOption> tentOptions) {
-        this.tentOptions = tentOptions;
-    }
 }

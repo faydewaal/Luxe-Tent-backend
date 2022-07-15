@@ -1,7 +1,7 @@
 package nl.novi.luxetent.controllers;
 
 import nl.novi.luxetent.Exceptions.BadRequestException;
-import nl.novi.luxetent.models.UserDto;
+import nl.novi.luxetent.dto.UserDto;
 import nl.novi.luxetent.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-
 
 @CrossOrigin
 @RestController
@@ -89,6 +88,5 @@ public class UserController {
     }
 
 }
-
 
 

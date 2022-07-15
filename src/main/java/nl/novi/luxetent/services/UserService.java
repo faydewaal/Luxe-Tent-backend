@@ -3,7 +3,7 @@ package nl.novi.luxetent.services;
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.models.Authority;
 import nl.novi.luxetent.models.User;
-import nl.novi.luxetent.models.UserDto;
+import nl.novi.luxetent.dto.UserDto;
 import nl.novi.luxetent.repositories.UserRepository;
 import nl.novi.luxetent.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,5 +113,4 @@ public class UserService {
 
         return user;
     }
-
 }

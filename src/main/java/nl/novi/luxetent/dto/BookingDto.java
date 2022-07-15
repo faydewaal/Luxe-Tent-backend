@@ -1,22 +1,22 @@
-package nl.novi.luxetent.models;
+package nl.novi.luxetent.dto;
 
-import javax.persistence.*;
 import java.util.Date;
 
-
-@Entity
-public class Booking {
-
-    @Id
-    @GeneratedValue
+public class BookingDto {
     private Long id;
     private String comment;
     private Date dateFrom;
     private Date dateTo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Tent_id")
-    private Tent tent;
+    public BookingDto() {
+    }
+
+    public BookingDto(Long id, String comment, Date dateFrom, Date dateTo) {
+        this.id = id;
+        this.comment = comment;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+    }
 
     public Long getId() {
         return id;
@@ -24,14 +24,6 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Tent getTent() {
-        return tent;
-    }
-
-    public void setTent(Tent tent) {
-        this.tent = tent;
     }
 
     public String getComment() {
@@ -57,5 +49,4 @@ public class Booking {
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
     }
-
 }
