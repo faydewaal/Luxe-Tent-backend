@@ -3,15 +3,14 @@ package nl.novi.luxetent.models;
 import javax.persistence.*;
 
 @Entity
-public class TentOption {
+public class TentOptions {
     @Id
     private Long id;
     private String optionName;
     private Float price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Tent_id")
-    private Tent tent;
+    public TentOptions() {
+    }
 
     public Long getId() {
         return id;
@@ -37,11 +36,4 @@ public class TentOption {
         this.price = price;
     }
 
-    public Tent getTent() {
-        return tent;
-    }
-
-    public void setTent(Tent tent) {
-        this.tent = tent;
-    }
 }

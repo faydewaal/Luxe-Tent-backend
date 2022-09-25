@@ -1,5 +1,6 @@
 package nl.novi.luxetent.models;
 
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +24,12 @@ public class User {
 
     @Column
     private String email;
+
+    @OneToOne
+    FileUploadResponse file;
+
+    @OneToOne
+    Tent tent;
 
     @OneToMany(
             targetEntity = Authority.class,
@@ -48,6 +55,23 @@ public class User {
     public void setApikey(String apikey) { this.apikey = apikey; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email;}
+    public FileUploadResponse getFile() {
+        return file;
+    }
+    public void setFile(FileUploadResponse file) {
+        this.file = file;
+    }
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Tent getTent() {
+        return tent;
+    }
+
+    public void setTent(Tent tent) {
+        this.tent = tent;
+    }
 
     public Set<Authority> getAuthorities() { return authorities; }
     public void addAuthority(Authority authority) {

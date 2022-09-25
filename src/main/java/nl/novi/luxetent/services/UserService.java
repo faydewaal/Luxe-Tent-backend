@@ -2,8 +2,12 @@ package nl.novi.luxetent.services;
 
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.models.Authority;
+import nl.novi.luxetent.models.FileUploadResponse;
+import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.models.User;
 import nl.novi.luxetent.dto.UserDto;
+import nl.novi.luxetent.repositories.FileUploadRepository;
+import nl.novi.luxetent.repositories.TentRepository;
 import nl.novi.luxetent.repositories.UserRepository;
 import nl.novi.luxetent.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +24,14 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    private TentRepository tentRepository;
+    FileUploadRepository uploadRepository;
 
+    public UserService(UserRepository userRepository, TentRepository tentRepository, FileUploadRepository uploadRepository) {
+        this.userRepository = userRepository;
+        this.tentRepository = tentRepository;
+        this.uploadRepository = uploadRepository;
+    }
 
     public List<UserDto> getUsers() {
         List<UserDto> collection = new ArrayList<>();
@@ -62,6 +73,28 @@ public class UserService {
         User user = userRepository.findById(username).get();
         user.setPassword(newUser.getPassword());
         userRepository.save(user);
+    }
+
+    public void assignPhotoToUser(String fileName, String username) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(fileName);
+        if (optionalUser.isPresent() && fileUploadResponse.isPresent()) {
+            FileUploadResponse photo = fileUploadResponse.get();
+            User user = optionalUser.get();
+            user.setFile(photo);
+            userRepository.save(user);
+        }
+    }
+
+    public void assignTentToUser(String username, Long id) {
+        Optional<User> optionalUser = userRepository.findById(username);
+        Optional<Tent> optionalTent = tentRepository.findById(id);
+        if (optionalUser.isPresent() && optionalTent.isPresent()) {
+            Tent tipi = optionalTent.get();
+            User user = optionalUser.get();
+            user.setTent(tipi);
+            userRepository.save(user);
+        }
     }
 
     public Set<Authority> getAuthorities(String username) {
