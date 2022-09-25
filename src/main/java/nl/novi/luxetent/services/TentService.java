@@ -1,134 +1,84 @@
 package nl.novi.luxetent.services;
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.dto.TentDto;
-import nl.novi.luxetent.dto.TentInputDto;
 import nl.novi.luxetent.models.Booking;
 import nl.novi.luxetent.models.FileUploadResponse;
 import nl.novi.luxetent.models.Tent;
-import nl.novi.luxetent.repositories.BookingRepository;
-import nl.novi.luxetent.repositories.FileUploadRepository;
-import nl.novi.luxetent.repositories.TentRepository;
+import nl.novi.luxetent.models.TentOptions;
+import nl.novi.luxetent.repositories.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TentService {
-
     private final TentRepository tentRepository;
     private final FileUploadRepository uploadRepository;
+    private final TentOptionRepository tentOptionRepository;
     private final BookingRepository bookingRepository;
 
-    public TentService(TentRepository tentRepository, FileUploadRepository uploadRepository, BookingRepository bookingRepository) {
+    public TentService(TentRepository tentRepository, FileUploadRepository uploadRepository, TentOptionRepository tentOptionRepository, BookingRepository bookingRepository) {
         this.tentRepository = tentRepository;
         this.uploadRepository = uploadRepository;
+        this.tentOptionRepository = tentOptionRepository;
         this.bookingRepository = bookingRepository;
     }
 
-    public List<TentDto> getAllTents() {
-        List<Tent> tentList = tentRepository.findAll();
-        return transferTentListToDtoList(tentList);
+    public List<Tent> getAllTents() {
+        List<Tent> tents = tentRepository.findAll();
+        return tents;
     }
 
-    public List<TentDto> getAllTentByTitle(String title) {
-        List<Tent> tentList = tentRepository.findAllTentsByTitleEqualsIgnoreCase(title);
-        return transferTentListToDtoList(tentList);
-    }
-
-    public List<TentDto> transferTentListToDtoList(List<Tent> tents){
-        List<TentDto> tentDtoList = new ArrayList<>();
-
-        for(Tent tent : tents) {
-            TentDto dto = transferToDto(tent);
-
-            tentDtoList.add(dto);
-        }
-        return tentDtoList;
-    }
-
-    public TentDto getTentById(Long id) {
-
-        if (tentRepository.findById(id).isPresent()){
-            Tent tent = tentRepository.findById(id).get();
-            TentDto dto =transferToDto(tent);
-
-            return transferToDto(tent);
-        }
-            throw new RecordNotFoundException("geen tent gevonden");
-    }
-
-    public TentDto addTent(TentInputDto dto) {
-
-        Tent tent = transferToTent(dto);
-        tentRepository.save(tent);
-
-        return transferToDto(tent);
-    }
-
-    public void deleteTent(@RequestBody Long id) {
-
-        tentRepository.deleteById(id);
-
-    }
-
-    public TentDto updateTent(Long id, TentInputDto inputDto) {
-
-        if (tentRepository.findById(id).isPresent()){
-
-            Tent tentje = tentRepository.findById(id).get();
-
-            Tent tent1 = transferToTent(inputDto);
-            tent1.setId(tentje.getId());
-
-            tentRepository.save(tent1);
-
-            return transferToDto(tent1);
-
-        } else {
-
-            throw new  RecordNotFoundException("geen tent gevonden");
-
-        }
-
-    }
-
-    public Tent transferToTent(TentInputDto dto){
-        var tent = new Tent();
-
-        tent.setTitle(dto.getTitle());
-        tent.setDescription(dto.getDescription());
-        tent.setPricePerNight(dto.getPricePerNight());
-        tent.setMaxNumberOfPersons(dto.getMaxNumberOfPersons());
-        tent.setStreet(dto.getStreet());
-        tent.setHouseNumber(dto.getHouseNumber());
-        tent.setCity(dto.getCity());
-        tent.setProvince(dto.getProvince());
-
+    public Tent getSingleTent(Long id) {
+        Tent tent = tentRepository.findById(id).get();
         return tent;
     }
 
-    public TentDto transferToDto(Tent tent){
-        TentDto dto = new TentDto();
+    public Tent createTent(TentDto tentDto){
+        Tent newTent = tentRepository.save(toTent(tentDto));
+        return newTent;
+    }
 
-        dto.setId(tent.getId());
-        dto.setTitle(tent.getTitle());
-        dto.setDescription(tent.getDescription());
-        dto.setPricePerNight(tent.getPricePerNight());
-        dto.setMaxNumberOfPersons(tent.getMaxNumberOfPersons());
-        dto.setStreet(tent.getStreet());
-        dto.setHouseNumber(tent.getHouseNumber());
-        dto.setCity(tent.getCity());
-        dto.setProvince(tent.getProvince());
+    public void deleteTent(Long id) {
+        tentRepository.deleteById(id);
+    }
+
+    public static TentDto fromTent(Tent tent) {
+        var dto = new TentDto();
+
+        dto.id = tent.getId();
+        dto.title = tent.getTitle();
+        dto.description = tent.getDescription();
+        dto.pricePerNight = tent.getPricePerNight();
+        dto.maxNumberOfPersons = tent.getMaxNumberOfPersons();
+        dto.street = tent.getStreet();
+        dto.houseNumber = tent.getHouseNumber();
+        dto.city = tent.getCity();
+        dto.province = tent.getProvince();
 
         return dto;
     }
 
+    public Tent toTent(TentDto tentDto) {
+        var tent = new Tent();
 
-    public void assignPhotoToTent(String fileName, Long tentId) {
-        Optional<Tent> optionalTent = tentRepository.findById(tentId);
+        tent.setId(tentDto.getId());
+        tent.setTitle(tentDto.getTitle());
+        tent.setDescription(tentDto.getDescription());
+        tent.setPricePerNight(tentDto.getPricePerNight());
+        tent.setMaxNumberOfPersons(tentDto.getMaxNumberOfPersons());
+        tent.setStreet(tentDto.getStreet());
+        tent.setHouseNumber(tentDto.getHouseNumber());
+        tent.setCity(tentDto.getCity());
+        tent.setProvince(tentDto.getProvince());
+
+        return tent;
+    }
+
+
+    public void assignPhotoToTent(String fileName, Long id) {
+        Optional<Tent> optionalTent = tentRepository.findById(id);
         Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(fileName);
 
         if (optionalTent.isPresent() && fileUploadResponse.isPresent()) {
@@ -139,6 +89,20 @@ public class TentService {
             tentRepository.save(tent);
         }
     }
+
+    public void assignOptionsToTent(Long id, Long optionId) {
+        var optionalTent = tentRepository.findById(id);
+        var tentOptions = tentOptionRepository.findById(optionId);
+
+        if (optionalTent.isPresent() && tentOptions.isPresent()) {
+            var tent = optionalTent.get();
+            var tentOptie = tentOptions.get();
+
+            tent.setTentOption(tentOptie);
+            tentRepository.save(tent);
+        }
+    }
+
 
     public void assignBookingToTent(Long id, Long bookingId) {
         var optionalTent = tentRepository.findById(id);
@@ -154,6 +118,9 @@ public class TentService {
             throw new RecordNotFoundException();
         }
     }
+
+
+
 }
 
 

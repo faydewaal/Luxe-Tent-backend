@@ -1,37 +1,33 @@
 package nl.novi.luxetent.dto;
 
-public class TentDto {
-    private Long Id;
-    private String title;
-    private String description;
-    private float pricePerNight;
-    private int maxNumberOfPersons;
-    private String street;
-    private String houseNumber;
-    private String city;
-    private String province;
+import nl.novi.luxetent.models.FileUploadResponse;
 
-    public TentDto() {
+public class TentDto {
+    public Long id;
+    public String title;
+    public String description;
+    public float pricePerNight;
+    public int maxNumberOfPersons;
+    public String street;
+    public String houseNumber;
+    public String city;
+    public String province;
+    public FileUploadResponse photo;
+
+    public FileUploadResponse getPhoto() {
+        return photo;
     }
 
-    public TentDto(Long Id, String title, String description, float pricePerNight, int maxNumberOfPersons, String street, String houseNumber, String city, String province) {
-        this.Id = Id;
-        this.title = title;
-        this.description = description;
-        this.pricePerNight = pricePerNight;
-        this.maxNumberOfPersons = maxNumberOfPersons;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.city = city;
-        this.province = province;
+    public void setPhoto(FileUploadResponse photo) {
+        this.photo = photo;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public String getTitle() {

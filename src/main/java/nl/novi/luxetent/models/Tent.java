@@ -1,17 +1,16 @@
 package nl.novi.luxetent.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 
 
 @Entity
 public class Tent {
+
     @Id
     @GeneratedValue
-    private Long Id;
-
+    private Long id;
     private String title;
     private String description;
     private float pricePerNight;
@@ -24,24 +23,14 @@ public class Tent {
     public Tent() {
     }
 
-    public Tent(Long id, String title, String description, float pricePerNight, int maxNumberOfPersons, String street, String houseNumber, String city, String province, FileUploadResponse file, List<Booking> bookings, List<Review> reviews, List<TentOption> tentOptions) {
-        Id = id;
-        this.title = title;
-        this.description = description;
-        this.pricePerNight = pricePerNight;
-        this.maxNumberOfPersons = maxNumberOfPersons;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.city = city;
-        this.province = province;
-        this.file = file;
-        this.bookings = bookings;
-        this.reviews = reviews;
-        this.tentOptions = tentOptions;
-    }
-
     @OneToOne
     FileUploadResponse file;
+
+    @OneToOne(mappedBy = "tent")
+    User user;
+
+    @OneToOne
+    TentOptions tentOptions;
 
     @OneToMany(mappedBy = "tent")
     @JsonIgnore
@@ -51,16 +40,14 @@ public class Tent {
     @JsonIgnore
     List<Review> reviews;
 
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
-    List<TentOption> tentOptions;
+
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -135,6 +122,14 @@ public class Tent {
         this.file = file;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<Booking> getBookings() {
         return bookings;
     }
@@ -151,11 +146,11 @@ public class Tent {
         this.reviews = reviews;
     }
 
-    public List<TentOption> getTentOptions() {
+    public TentOptions getTentOption() {
         return tentOptions;
     }
 
-    public void setTentOptions(List<TentOption> tentOptions) {
+    public void setTentOption(TentOptions tentOptions) {
         this.tentOptions = tentOptions;
     }
 }
