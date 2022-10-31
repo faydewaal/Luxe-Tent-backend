@@ -84,7 +84,6 @@ public class TentService {
         if (optionalTent.isPresent() && fileUploadResponse.isPresent()) {
             FileUploadResponse photo = fileUploadResponse.get();
             Tent tent = optionalTent.get();
-
             tent.setFile(photo);
             tentRepository.save(tent);
         }

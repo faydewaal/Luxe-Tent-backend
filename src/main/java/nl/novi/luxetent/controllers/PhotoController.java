@@ -2,6 +2,7 @@ package nl.novi.luxetent.controllers;
 
 import nl.novi.luxetent.models.FileUploadResponse;
 import nl.novi.luxetent.services.PhotoService;
+import nl.novi.luxetent.services.TentService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,12 +16,15 @@ import java.io.IOException;
 import java.util.Objects;
 
 @RestController
+@RequestMapping("/photos")
 @CrossOrigin
 public class PhotoController {
-    private final PhotoService service;
+    private final PhotoService photoService;
+    private final TentService tentService;
 
-    public PhotoController(PhotoService service) {
-        this.service = service;
+    public PhotoController(PhotoService photoService, TentService tentService) {
+        this.photoService = photoService;
+        this.tentService = tentService;
     }
 
     @PostMapping("/upload")
@@ -28,15 +32,14 @@ public class PhotoController {
 
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
         String contentType = file.getContentType();
-        String fileName = service.storeFile(file, url);
-
+        String fileName = photoService.storeFile(file, url);
         return new FileUploadResponse(fileName, contentType, url );
     }
 
     @GetMapping("/download/{fileName}")
     ResponseEntity<Resource> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
 
-        Resource resource = service.downLoadFile(fileName);
+        Resource resource = photoService.downLoadFile(fileName);
         String mimeType;
 
         try{

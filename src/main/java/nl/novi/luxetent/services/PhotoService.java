@@ -8,6 +8,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import java.io.IOException;
@@ -21,17 +22,17 @@ import java.util.Objects;
 
 @Service
 public class PhotoService {
-    @Value("${my.upload_location}")
     private Path fileStoragePath;
     private final String fileStorageLocation;
+    private final FileUploadRepository repository;
+    private final TentService tentService;
 
-    private final FileUploadRepository repo;
-
-    public PhotoService(@Value("${my.upload_location}") String fileStorageLocation, FileUploadRepository repo) {
+    public PhotoService(@Value("${my.upload_location}") String fileStorageLocation, FileUploadRepository repository, TentService tentService) {
         fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
 
         this.fileStorageLocation = fileStorageLocation;
-        this.repo = repo;
+        this.repository = repository;
+        this.tentService = tentService;
 
         try {
             Files.createDirectories(fileStoragePath);
@@ -47,13 +48,13 @@ public class PhotoService {
 
         Path filePath = Paths.get(fileStoragePath + "\\" + fileName);
 
+
         try {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException("Issue in storing the file", e);
         }
-
-        repo.save(new FileUploadResponse(fileName, file.getContentType(), url));
+        repository.save(new FileUploadResponse(fileName, file.getContentType(), url));
 
         return fileName;
     }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class TentController {
         this.controller = controller;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Tent> getAllTents() {
         return tentService.getAllTents();
     }
@@ -61,7 +62,7 @@ public class TentController {
     }
 
     @PostMapping("/{id}/photo")
-    public void assignPhotoToTent(@PathVariable("id") Long id, @RequestParam("photo") @RequestBody MultipartFile file) {
+    public void assignPhotoToTent(@PathVariable("id") Long id, @RequestBody MultipartFile file) {
         FileUploadResponse photo = controller.singleFileUpload(file);
         tentService.assignPhotoToTent(photo.getFileName(), id);
     }

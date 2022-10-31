@@ -3,7 +3,6 @@ package nl.novi.luxetent.services;
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.models.Authority;
 import nl.novi.luxetent.models.FileUploadResponse;
-import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.models.User;
 import nl.novi.luxetent.dto.UserDto;
 import nl.novi.luxetent.repositories.FileUploadRepository;
@@ -22,11 +21,11 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    private TentRepository tentRepository;
-    FileUploadRepository uploadRepository;
+    private final UserRepository userRepository;
+    private final TentRepository tentRepository;
+    private final FileUploadRepository uploadRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository, TentRepository tentRepository, FileUploadRepository uploadRepository) {
         this.userRepository = userRepository;
         this.tentRepository = tentRepository;
@@ -53,9 +52,9 @@ public class UserService {
         return dto;
     }
 
-    public boolean userExists(String username) {
-        return userRepository.existsById(username);
-    }
+//    public boolean userExists(String username) {
+//        return userRepository.existsById(username);
+//    }
 
     public String createUser(UserDto userDto) {
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
@@ -75,24 +74,24 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void assignPhotoToUser(String fileName, String username) {
-        Optional<User> optionalUser = userRepository.findById(username);
-        Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(fileName);
-        if (optionalUser.isPresent() && fileUploadResponse.isPresent()) {
-            FileUploadResponse photo = fileUploadResponse.get();
-            User user = optionalUser.get();
-            user.setFile(photo);
-            userRepository.save(user);
-        }
-    }
+//    public void assignPhotoToUser(String fileName, String username) {
+//        Optional<User> optionalUser = userRepository.findById(username);
+//        Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(fileName);
+//        if (optionalUser.isPresent() && fileUploadResponse.isPresent()) {
+//            FileUploadResponse photo = fileUploadResponse.get();
+//            User user = optionalUser.get();
+//            user.setFile(photo);
+//            userRepository.save(user);
+//        }
+//    }
 
-    public void assignTentToUser(String username, Long id) {
-        Optional<User> optionalUser = userRepository.findById(username);
-        Optional<Tent> optionalTent = tentRepository.findById(id);
+    public void assignTentToUser(Long tentId, String username) {
+        var optionalUser = userRepository.findById(username);
+        var optionalTent = tentRepository.findById(tentId);
         if (optionalUser.isPresent() && optionalTent.isPresent()) {
-            Tent tipi = optionalTent.get();
-            User user = optionalUser.get();
-            user.setTent(tipi);
+            var user = optionalUser.get();
+            var tent = optionalTent.get();
+            user.getTent().add(tent);
             userRepository.save(user);
         }
     }

@@ -9,7 +9,7 @@ import java.util.List;
 public class Tent {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
     private String description;
@@ -20,27 +20,38 @@ public class Tent {
     private String city;
     private String province;
 
+    @OneToOne
+    private FileUploadResponse file;
+
+    @OneToOne
+    private TentOptions tentOptions;
+
+    @OneToMany(mappedBy = "tent")
+    @JsonIgnore
+    private List<Booking> bookings;
+
+    @OneToMany(mappedBy = "tent")
+    @JsonIgnore
+    private List<Review> reviews;
+
     public Tent() {
     }
 
-    @OneToOne
-    FileUploadResponse file;
-
-    @OneToOne(mappedBy = "tent")
-    User user;
-
-    @OneToOne
-    TentOptions tentOptions;
-
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
-    List<Booking> bookings;
-
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
-    List<Review> reviews;
-
-
+    public Tent(Long id, String title, String description, float pricePerNight, int maxNumberOfPersons, String street, String houseNumber, String city, String province, FileUploadResponse file, TentOptions tentOptions, List<Booking> bookings, List<Review> reviews) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.pricePerNight = pricePerNight;
+        this.maxNumberOfPersons = maxNumberOfPersons;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.city = city;
+        this.province = province;
+        this.file = file;
+        this.tentOptions = tentOptions;
+        this.bookings = bookings;
+        this.reviews = reviews;
+    }
 
     public Long getId() {
         return id;
@@ -120,14 +131,6 @@ public class Tent {
 
     public void setFile(FileUploadResponse file) {
         this.file = file;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public List<Booking> getBookings() {
