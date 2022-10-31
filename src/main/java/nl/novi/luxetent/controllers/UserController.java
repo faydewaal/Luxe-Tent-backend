@@ -3,13 +3,10 @@ package nl.novi.luxetent.controllers;
 import nl.novi.luxetent.Exceptions.BadRequestException;
 import nl.novi.luxetent.Exceptions.UsernameNotFoundException;
 import nl.novi.luxetent.dto.UserDto;
-import nl.novi.luxetent.models.FileUploadResponse;
-import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -21,19 +18,16 @@ import java.util.Map;
 @RequestMapping(value = "/users")
 public class UserController {
 
-    private UserService userService;
-    private final PhotoController photoController;
-    private final TentController tentController;
+    private final UserService userService;
 
-
-    @Autowired
-    public UserController(UserService userService, PhotoController photoController, TentController tentController) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.photoController = photoController;
-        this.tentController = tentController;
     }
 
-    @GetMapping(value = "")
+    @Autowired
+
+
+    @GetMapping(value = "/all")
     public ResponseEntity<List<UserDto>> getUsers() {
         List<UserDto> userDtos = userService.getUsers();
         return ResponseEntity.ok().body(userDtos);
@@ -57,39 +51,31 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(value = "/{username}")
+    @PutMapping(value = "/update/{username}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto dto) {
         userService.updateUser(username, dto);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{username}")
+    @DeleteMapping(value = "/delete/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{username}/photo")
-    public void assignPhotoToUser(@PathVariable("username") String username, @RequestBody MultipartFile file){
-        FileUploadResponse photo = photoController.singleFileUpload(file);
+    @PutMapping("/addtent/{username}/{tentId}")
+    public void assignTentToUser(@PathVariable("username") String username, @PathVariable("tentId") Long tentId){
 
-        userService.assignPhotoToUser(username, photo.getFileName());
-    }
-
-    @PostMapping("/{username}/tent")
-    public void assignTentToUser(@PathVariable("username") String username, @RequestParam("tent") @RequestBody Long id){
-        Tent tipi = tentController.getTentById(id);
-
-        userService.assignTentToUser(username, tipi.getId());
+        userService.assignTentToUser(tentId, username);
     }
 
 
-    @GetMapping(value = "/{username}/authorities")
+    @GetMapping(value = "/getauth/{username}/authorities")
     public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
 
-    @PostMapping(value = "/{username}/authorities")
+    @PostMapping(value = "/addauth/{username}/authorities")
     public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
         try {
             String authorityName = (String) fields.get("authority");
@@ -101,7 +87,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(value = "/{username}/authorities/{authority}")
+    @DeleteMapping(value = "/deleteauth/{username}/authorities/{authority}")
     public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
         userService.removeAuthority(username, authority);
         return ResponseEntity.noContent().build();

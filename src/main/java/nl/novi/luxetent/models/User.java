@@ -1,9 +1,7 @@
 package nl.novi.luxetent.models;
 
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -26,10 +24,10 @@ public class User {
     private String email;
 
     @OneToOne
-    FileUploadResponse file;
+    private FileUploadResponse file;
 
-    @OneToOne
-    Tent tent;
+    @OneToMany
+    private List<Tent> tent;
 
     @OneToMany(
             targetEntity = Authority.class,
@@ -38,6 +36,9 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();
+
+    public User() {
+    }
 
     public String getUsername() { return username; }
     public void setUsername(String username) {
@@ -65,11 +66,11 @@ public class User {
         this.authorities = authorities;
     }
 
-    public Tent getTent() {
+    public List<Tent> getTent() {
         return tent;
     }
 
-    public void setTent(Tent tent) {
+    public void setTent(List<Tent> tent) {
         this.tent = tent;
     }
 
