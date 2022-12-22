@@ -1,12 +1,12 @@
 package nl.novi.luxetent.models;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 
 @Entity
-public class Tent {
+@Table(name = "tent")
+public class Tent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,34 +23,16 @@ public class Tent {
     @OneToOne
     private FileUploadResponse file;
 
-    @OneToOne
-    private TentOptions tentOptions;
+    @OneToMany()
+    private List<TentOptions> tentOptions;
 
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
+    @OneToMany()
     private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "tent")
-    @JsonIgnore
+    @OneToMany()
     private List<Review> reviews;
 
     public Tent() {
-    }
-
-    public Tent(Long id, String title, String description, float pricePerNight, int maxNumberOfPersons, String street, String houseNumber, String city, String province, FileUploadResponse file, TentOptions tentOptions, List<Booking> bookings, List<Review> reviews) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.pricePerNight = pricePerNight;
-        this.maxNumberOfPersons = maxNumberOfPersons;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.city = city;
-        this.province = province;
-        this.file = file;
-        this.tentOptions = tentOptions;
-        this.bookings = bookings;
-        this.reviews = reviews;
     }
 
     public Long getId() {
@@ -133,6 +115,14 @@ public class Tent {
         this.file = file;
     }
 
+    public List<TentOptions> getTentOptions() {
+        return tentOptions;
+    }
+
+    public void setTentOptions(List<TentOptions> tentOptions) {
+        this.tentOptions = tentOptions;
+    }
+
     public List<Booking> getBookings() {
         return bookings;
     }
@@ -149,11 +139,4 @@ public class Tent {
         this.reviews = reviews;
     }
 
-    public TentOptions getTentOption() {
-        return tentOptions;
-    }
-
-    public void setTentOption(TentOptions tentOptions) {
-        this.tentOptions = tentOptions;
-    }
 }

@@ -2,8 +2,10 @@ package nl.novi.luxetent.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "images")
 public class FileUploadResponse {
 
     @Id

@@ -2,14 +2,12 @@ package nl.novi.luxetent.services;
 
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.models.Authority;
-import nl.novi.luxetent.models.FileUploadResponse;
 import nl.novi.luxetent.models.User;
 import nl.novi.luxetent.dto.UserDto;
 import nl.novi.luxetent.repositories.FileUploadRepository;
 import nl.novi.luxetent.repositories.TentRepository;
 import nl.novi.luxetent.repositories.UserRepository;
 import nl.novi.luxetent.utils.RandomStringGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,6 @@ public class UserService {
     private final TentRepository tentRepository;
     private final FileUploadRepository uploadRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository, TentRepository tentRepository, FileUploadRepository uploadRepository) {
         this.userRepository = userRepository;
         this.tentRepository = tentRepository;
@@ -52,9 +49,6 @@ public class UserService {
         return dto;
     }
 
-//    public boolean userExists(String username) {
-//        return userRepository.existsById(username);
-//    }
 
     public String createUser(UserDto userDto) {
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
@@ -74,20 +68,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-//    public void assignPhotoToUser(String fileName, String username) {
-//        Optional<User> optionalUser = userRepository.findById(username);
-//        Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(fileName);
-//        if (optionalUser.isPresent() && fileUploadResponse.isPresent()) {
-//            FileUploadResponse photo = fileUploadResponse.get();
-//            User user = optionalUser.get();
-//            user.setFile(photo);
-//            userRepository.save(user);
-//        }
-//    }
 
-    public void assignTentToUser(Long tentId, String username) {
+    public void assignTentToUser(String username, Long id) {
         var optionalUser = userRepository.findById(username);
-        var optionalTent = tentRepository.findById(tentId);
+        var optionalTent = tentRepository.findById(id);
         if (optionalUser.isPresent() && optionalTent.isPresent()) {
             var user = optionalUser.get();
             var tent = optionalTent.get();
@@ -129,6 +113,7 @@ public class UserService {
         dto.apikey = user.getApikey();
         dto.email = user.getEmail();
         dto.authorities = user.getAuthorities();
+        dto.tent = user.getTent();
 
         return dto;
     }

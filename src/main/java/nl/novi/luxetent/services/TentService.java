@@ -1,4 +1,5 @@
 package nl.novi.luxetent.services;
+
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.dto.TentDto;
 import nl.novi.luxetent.models.Booking;
@@ -97,7 +98,7 @@ public class TentService {
             var tent = optionalTent.get();
             var tentOptie = tentOptions.get();
 
-            tent.setTentOption(tentOptie);
+            tent.setTentOptions((List<TentOptions>)tentOptie);
             tentRepository.save(tent);
         }
     }
