@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/photos")
 @CrossOrigin
 public class PhotoController {
     private final PhotoService photoService;

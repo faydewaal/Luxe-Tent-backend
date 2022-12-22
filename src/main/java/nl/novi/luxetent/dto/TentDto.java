@@ -1,7 +1,5 @@
 package nl.novi.luxetent.dto;
 
-import nl.novi.luxetent.models.FileUploadResponse;
-
 public class TentDto {
     public Long id;
     public String title;
@@ -12,15 +10,7 @@ public class TentDto {
     public String houseNumber;
     public String city;
     public String province;
-    public FileUploadResponse photo;
 
-    public FileUploadResponse getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(FileUploadResponse photo) {
-        this.photo = photo;
-    }
 
     public Long getId() {
         return id;

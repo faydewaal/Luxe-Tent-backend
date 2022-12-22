@@ -9,19 +9,10 @@ public class Review {
     private String comment;
     private int rating;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Tent_id")
-    private Tent tent;
-
     public Review() {
     }
 
-    public Review(Long id, String comment, int rating, Tent tent) {
-        this.id = id;
-        this.comment = comment;
-        this.rating = rating;
-        this.tent = tent;
-    }
+
 
     public Long getId() {
         return id;
@@ -47,11 +38,4 @@ public class Review {
         this.rating = rating;
     }
 
-    public Tent getTent() {
-        return tent;
-    }
-
-    public void setTent(Tent tent) {
-        this.tent = tent;
-    }
 }

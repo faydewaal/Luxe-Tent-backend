@@ -26,8 +26,15 @@ public class User {
     @OneToOne
     private FileUploadResponse file;
 
-    @OneToMany
-    private List<Tent> tent;
+    @OneToMany(
+            targetEntity = Tent.class,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private List<Tent> tent = new ArrayList<>();
+
+    @OneToMany()
+    private List<Review> reviews;
 
     @OneToMany(
             targetEntity = Authority.class,
@@ -82,4 +89,11 @@ public class User {
         this.authorities.remove(authority);
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }
