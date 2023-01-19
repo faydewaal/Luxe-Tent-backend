@@ -33,9 +33,6 @@ public class User {
             fetch = FetchType.EAGER)
     private List<Tent> tent = new ArrayList<>();
 
-    @OneToMany()
-    private List<Review> reviews;
-
     @OneToMany(
             targetEntity = Authority.class,
             mappedBy = "username",
@@ -89,11 +86,4 @@ public class User {
         this.authorities.remove(authority);
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
 }
