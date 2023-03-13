@@ -69,7 +69,7 @@ public class BookingService {
     }
 
     public static BookingDto transferToDto(Booking booking){
-        var dto = new BookingDto();
+        BookingDto dto = new BookingDto();
 
         dto.setId(booking.getId());
         dto.setComment(booking.getComment());

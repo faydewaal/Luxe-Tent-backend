@@ -15,7 +15,7 @@ import java.util.Map;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -49,13 +49,13 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping( "/update/{username}")
+    @PutMapping( "/{username}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto dto) {
         userService.updateUser(username, dto);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping( "/delete/{username}")
+    @DeleteMapping( "/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
@@ -66,12 +66,12 @@ public class UserController {
         userService.assignTentToUser(username, id);
     }
 
-    @GetMapping( "/getauth/{username}/authorities")
+    @GetMapping( "/getauth/{username}")
     public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
 
-    @PostMapping( "/addauth/{username}/authorities")
+    @PostMapping( "/addauth/{username}")
     public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
         try {
             String authorityName = (String) fields.get("authority");
@@ -83,7 +83,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping( "/deleteauth/{username}/authorities/{authority}")
+    @DeleteMapping( "/deleteauth/{username}/{authority}")
     public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
         userService.removeAuthority(username, authority);
         return ResponseEntity.noContent().build();

@@ -2,6 +2,7 @@ package nl.novi.luxetent.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -13,10 +14,17 @@ public class Booking {
     private String comment;
     private Date dateFrom;
     private Date dateTo;
+    
+ 
+    @OneToMany
+    private List<TentOptions> tentOptions;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Tent_id")
-    private Tent tent;
+	@OneToMany
+    private List<Review> reviews;
+    
+    public Booking() {
+    	
+    }
 
     public Long getId() {
         return id;
@@ -24,14 +32,6 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Tent getTent() {
-        return tent;
-    }
-
-    public void setTent(Tent tent) {
-        this.tent = tent;
     }
 
     public String getComment() {
@@ -57,5 +57,22 @@ public class Booking {
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
     }
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+	
+	public List<TentOptions> getTentOptions() {
+		return tentOptions;
+	}
+
+	public void setTentOptions(List<TentOptions> tentOptions) {
+		this.tentOptions = tentOptions;
+	}
+    
 
 }

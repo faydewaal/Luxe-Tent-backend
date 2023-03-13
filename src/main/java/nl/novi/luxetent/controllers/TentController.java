@@ -1,5 +1,6 @@
 package nl.novi.luxetent.controllers;
 
+import nl.novi.luxetent.Exceptions.UsernameNotFoundException;
 import nl.novi.luxetent.dto.TentDto;
 import nl.novi.luxetent.models.FileUploadResponse;
 import nl.novi.luxetent.models.Tent;
@@ -26,17 +27,21 @@ public class TentController {
         this.controller = controller;
     }
 
-    @GetMapping("/all")
-    public List<Tent> getAllTents() {
-        return tentService.getAllTents();
+    @GetMapping
+    public ResponseEntity<List<TentDto>> getAllTents() {
+        List<TentDto> tentDtos = tentService.getAllTents();
+        return ResponseEntity.ok().body(tentDtos);
     }
+   
 
     @GetMapping("/{id}")
-    public Tent getTentById(@PathVariable("id")Long id) {
-
-        Tent tent = tentService.getSingleTent(id);
-
-        return tent;
+    public ResponseEntity<TentDto> getTent(@PathVariable("id") Long id) {
+        try {
+            TentDto tentDto = tentService.getSingleTent(id);
+            return ResponseEntity.ok().body(tentDto);
+        } catch (UsernameNotFoundException exception) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -58,7 +63,7 @@ public class TentController {
         tentService.assignBookingToTent(id, bookingId);
     }
 
-    @PostMapping("/{id}/photo")
+    @PutMapping("/{id}")
     public void assignPhotoToTent(@PathVariable("id") Long id, @RequestBody MultipartFile file) {
         FileUploadResponse photo = controller.singleFileUpload(file);
         tentService.assignPhotoToTent(photo.getFileName(), id);

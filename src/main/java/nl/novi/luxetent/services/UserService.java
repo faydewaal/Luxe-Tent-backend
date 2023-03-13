@@ -2,6 +2,7 @@ package nl.novi.luxetent.services;
 
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.models.Authority;
+import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.models.User;
 import nl.novi.luxetent.dto.UserDto;
 import nl.novi.luxetent.repositories.FileUploadRepository;
@@ -21,12 +22,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TentRepository tentRepository;
-    private final FileUploadRepository uploadRepository;
 
-    public UserService(UserRepository userRepository, TentRepository tentRepository, FileUploadRepository uploadRepository) {
+    public UserService(UserRepository userRepository, TentRepository tentRepository) {
         this.userRepository = userRepository;
         this.tentRepository = tentRepository;
-        this.uploadRepository = uploadRepository;
     }
 
     public List<UserDto> getUsers() {
@@ -70,11 +69,12 @@ public class UserService {
 
 
     public void assignTentToUser(String username, Long id) {
-        var optionalUser = userRepository.findById(username);
-        var optionalTent = tentRepository.findById(id);
+        Optional<User> optionalUser = userRepository.findById(username);
+        Optional<Tent> optionalTent = tentRepository.findById(id);
+        
         if (optionalUser.isPresent() && optionalTent.isPresent()) {
-            var user = optionalUser.get();
-            var tent = optionalTent.get();
+            User user = optionalUser.get();
+            Tent tent = optionalTent.get();
             user.getTent().add(tent);
             userRepository.save(user);
         }
@@ -102,10 +102,9 @@ public class UserService {
         user.removeAuthority(authorityToRemove);
         userRepository.save(user);
     }
-
+    
     public static UserDto fromUser(User user){
-
-        var dto = new UserDto();
+    	UserDto dto = new UserDto();
 
         dto.username = user.getUsername();
         dto.password = user.getPassword();
@@ -119,8 +118,7 @@ public class UserService {
     }
 
     public User toUser(UserDto userDto) {
-
-        var user = new User();
+        User user = new User();
 
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());

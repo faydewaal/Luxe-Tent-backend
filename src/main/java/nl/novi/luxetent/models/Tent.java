@@ -29,8 +29,6 @@ public class Tent implements Serializable {
     @OneToMany()
     private List<Booking> bookings;
 
-    @OneToMany()
-    private List<Review> reviews;
 
     public Tent() {
     }
@@ -129,14 +127,6 @@ public class Tent implements Serializable {
 
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
     }
 
 }
