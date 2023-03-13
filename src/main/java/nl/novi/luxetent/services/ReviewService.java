@@ -65,7 +65,7 @@ public class ReviewService {
     }
 
     public static ReviewDto transferToDto(Review review){
-        var dto = new ReviewDto();
+        ReviewDto dto = new ReviewDto();
 
         dto.setId(review.getId());
         dto.setComment(review.getComment());

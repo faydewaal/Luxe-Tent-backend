@@ -23,8 +23,6 @@ public class User {
     @Column
     private String email;
 
-    @OneToOne
-    private FileUploadResponse file;
 
     @OneToMany(
             targetEntity = Tent.class,
@@ -40,8 +38,19 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();
+    
+    @OneToMany
+    private List<Booking> Bookings;
 
-    public User() {
+    public List<Booking> getBookings() {
+		return Bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		Bookings = bookings;
+	}
+
+	public User() {
     }
 
     public String getUsername() { return username; }
@@ -54,18 +63,24 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public boolean isEnabled() { return enabled;}
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
-    public String getApikey() { return apikey; }
-    public void setApikey(String apikey) { this.apikey = apikey; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email;}
-    public FileUploadResponse getFile() {
-        return file;
-    }
-    public void setFile(FileUploadResponse file) {
-        this.file = file;
-    }
+    public boolean isEnabled() { 
+    	return enabled;}
+    
+    public void setEnabled(boolean enabled) { 
+    	this.enabled = enabled; }
+    
+    public String getApikey() { 
+    	return apikey; }
+    
+    public void setApikey(String apikey) { 
+    	this.apikey = apikey; }
+    
+    public String getEmail() { 
+    	return email; }
+    
+    public void setEmail(String email) { 
+    	this.email = email;}
+    
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
