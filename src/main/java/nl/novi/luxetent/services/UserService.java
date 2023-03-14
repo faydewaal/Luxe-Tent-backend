@@ -5,12 +5,12 @@ import nl.novi.luxetent.models.Authority;
 import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.models.User;
 import nl.novi.luxetent.dto.UserDto;
-import nl.novi.luxetent.repositories.FileUploadRepository;
 import nl.novi.luxetent.repositories.TentRepository;
 import nl.novi.luxetent.repositories.UserRepository;
 import nl.novi.luxetent.utils.RandomStringGenerator;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TentRepository tentRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, TentRepository tentRepository) {
         this.userRepository = userRepository;
         this.tentRepository = tentRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public List<UserDto> getUsers() {
@@ -51,7 +53,9 @@ public class UserService {
 
     public String createUser(UserDto userDto) {
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
-        userDto.setApikey(randomString);
+        userDto.setAuthorities(null);
+        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(encodedPassword);
         User newUser = userRepository.save(toUser(userDto));
         return newUser.getUsername();
     }

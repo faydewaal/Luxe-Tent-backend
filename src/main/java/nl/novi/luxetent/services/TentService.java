@@ -72,6 +72,7 @@ public class TentService {
         dto.houseNumber = tent.getHouseNumber();
         dto.city = tent.getCity();
         dto.province = tent.getProvince();
+        dto.file = tent.getFile();
 
         return dto;
     }
