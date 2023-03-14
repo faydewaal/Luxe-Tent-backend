@@ -27,7 +27,7 @@ public class TentController {
         this.controller = controller;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<TentDto>> getAllTents() {
         List<TentDto> tentDtos = tentService.getAllTents();
         return ResponseEntity.ok().body(tentDtos);
@@ -69,7 +69,7 @@ public class TentController {
         tentService.assignPhotoToTent(photo.getFileName(), id);
     }
 
-    @PostMapping("/{id}/{tentOptionsId}")
+    @PutMapping("/{id}/{tentOptionsId}")
     public void assignOptionsToTent(@PathVariable("id") Long id, @PathVariable("tentOptionsId") Long optionsId) {
         tentService.assignOptionsToTent(id, optionsId);
     }
