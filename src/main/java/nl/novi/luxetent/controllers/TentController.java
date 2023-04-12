@@ -69,7 +69,7 @@ public class TentController {
         tentService.assignPhotoToTent(photo.getFileName(), id);
     }
 
-    @PutMapping("/{id}/{tentOptionsId}")
+    @PutMapping("options/{id}/{tentOptionsId}")
     public void assignOptionsToTent(@PathVariable("id") Long id, @PathVariable("tentOptionsId") Long optionsId) {
         tentService.assignOptionsToTent(id, optionsId);
     }

@@ -55,8 +55,24 @@ VALUES (60, 'Luxe tipi in het bos', 'Overnachten in eenLuxe tipi in het bos.', 1
 INSERT INTO tent (id, title, description, price_per_night, max_number_of_persons, street, city, house_number, province, file_file_name)
 VALUES (61, 'tipi huisje', 'Heerlijk huisje in Flevoland', 170, 4, 'Ijsselstraat', 'Emmeloord', '78', 'Flevoland', 'tent-hut-fiets.jpg');
 
+INSERT INTO tent_options (id, option_name, price)
+VALUES (1, 'Fietsverhuur', 20);
+INSERT INTO tent_options (id, option_name, price)
+VALUES (2, 'Jacuzzi', 30);
+INSERT INTO tent_options (id, option_name, price)
+VALUES (3, 'Kinderzitje', 5);
+INSERT INTO tent_options (id, option_name, price)
+VALUES (4, 'Electrische step', 25);
+INSERT INTO tent_options (id, option_name, price)
+VALUES (5, 'BBQ grill', 20);
+INSERT INTO tent_options (id, option_name, price)
+VALUES (6, 'Badminton rackets', 5);
+
+
 INSERT INTO users_tent (user_username, tent_id) VALUES ('Fay', 50);
 INSERT INTO users_tent (user_username, tent_id) VALUES ('Fay', 51);
+
+INSERT INTO tent_tent_options (tent_id, tent_options_id) VALUES (50, 1);
 
 INSERT INTO authorities (username, authority) VALUES ('Fay', 'ROLE_USER');
 INSERT INTO authorities (username, authority) VALUES ('user', 'ROLE_USER');

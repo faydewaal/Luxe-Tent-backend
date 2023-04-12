@@ -2,15 +2,11 @@ package nl.novi.luxetent.services;
 
 import nl.novi.luxetent.Exceptions.RecordNotFoundException;
 import nl.novi.luxetent.dto.TentDto;
-import nl.novi.luxetent.dto.UserDto;
 import nl.novi.luxetent.models.Booking;
 import nl.novi.luxetent.models.FileUploadResponse;
 import nl.novi.luxetent.models.Tent;
 import nl.novi.luxetent.models.TentOptions;
-import nl.novi.luxetent.models.User;
 import nl.novi.luxetent.repositories.*;
-
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

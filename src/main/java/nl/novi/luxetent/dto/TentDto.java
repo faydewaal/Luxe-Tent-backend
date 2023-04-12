@@ -1,6 +1,10 @@
 package nl.novi.luxetent.dto;
 
+import java.util.List;
+
 import nl.novi.luxetent.models.FileUploadResponse;
+import nl.novi.luxetent.models.Tent;
+import nl.novi.luxetent.models.TentOptions;
 
 public class TentDto {
     public Long id;
@@ -13,7 +17,7 @@ public class TentDto {
     public String city;
     public String province;
 	public FileUploadResponse file;
-
+	public List<TentOptions> tentoptions;
 
     public Long getId() {
         return id;
@@ -94,6 +98,16 @@ public class TentDto {
 	public void setFile(FileUploadResponse file) {
 		this.file = file;
 	}
+
+	public List<TentOptions> getTentoptions() {
+		return tentoptions;
+	}
+
+	public void setTentoptions(List<TentOptions> tentoptions) {
+		this.tentoptions = tentoptions;
+	}
+	
+	
     
 
 }
